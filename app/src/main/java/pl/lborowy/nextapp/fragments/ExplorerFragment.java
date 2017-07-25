@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import pl.lborowy.nextapp.adapters.FilesAdapter;
 import pl.lborowy.nextapp.models.FileItem;
 import pl.lborowy.nextapp.R;
 
@@ -33,6 +35,7 @@ public class ExplorerFragment extends Fragment {
 
     private String currentFilePath;
     private ExploratorInteractionListener mListener;
+    private FilesAdapter filesAdapter;
 
     public ExplorerFragment() {
         // Required empty public constructor
@@ -72,7 +75,7 @@ public class ExplorerFragment extends Fragment {
     }
 
     private void loadFileList() {
-        List<FileItem> fileItemList = new ArrayList<>();
+        List<FileItem> fileItemList = new ArrayList<>(); // to co mamy rzeczywiscie na dysku
         File file = new File(currentFilePath);
         if (file.isDirectory()) {
             File[] files = file.listFiles(); // pliki do wyswietlenia na liscie
@@ -82,8 +85,15 @@ public class ExplorerFragment extends Fragment {
                 fileItemList.add(fileItem);
             }
         }
+        else {
+            fileItemList.add(new FileItem(file));
+        }
 
         Log.d("PLICZKI", "Ile plików lub folderów " + fileItemList.size());
+
+        filesAdapter = new FilesAdapter(getActivity().getApplicationContext(), fileItemList);
+        recyclerView.setAdapter(filesAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
     }
 
     @Override
