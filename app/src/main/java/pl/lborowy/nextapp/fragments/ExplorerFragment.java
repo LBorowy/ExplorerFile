@@ -5,13 +5,19 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import pl.lborowy.nextapp.models.FileItem;
 import pl.lborowy.nextapp.R;
 
 
@@ -62,6 +68,22 @@ public class ExplorerFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //// TODO: 2017-07-25 show filePath
         filePathText.setText(currentFilePath);
+        loadFileList();
+    }
+
+    private void loadFileList() {
+        List<FileItem> fileItemList = new ArrayList<>();
+        File file = new File(currentFilePath);
+        if (file.isDirectory()) {
+            File[] files = file.listFiles(); // pliki do wyswietlenia na liscie
+
+            for (File currentFile : files) { // informacje
+                FileItem fileItem = new FileItem(currentFile);
+                fileItemList.add(fileItem);
+            }
+        }
+
+        Log.d("PLICZKI", "Ile plików lub folderów " + fileItemList.size());
     }
 
     @Override
