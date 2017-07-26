@@ -25,7 +25,7 @@ import pl.lborowy.nextapp.R;
 
 public class ExplorerFragment extends Fragment implements FilesAdapter.OnFileItemClicked {
     private static final String ARG_PATH_PARAM = "param1";
-    public static final boolean USE_ACTIVITY_TO_NAVIGATE = true;
+    public static final boolean USE_ACTIVITY_TO_NAVIGATE = false; // brak przezroczystych fragmentow
 
     @BindView(R.id.explorerFragment_filePathText)
     TextView filePathText;
