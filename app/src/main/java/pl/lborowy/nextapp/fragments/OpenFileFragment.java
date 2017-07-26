@@ -5,10 +5,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.StringReader;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,6 +62,43 @@ public class OpenFileFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         outputText.setText(currentFilePath);
+        openFile();
+    }
+
+    private void openFile() {
+//        File file = new File(currentFilePath);
+//        file.exists();
+
+        try {
+            FileInputStream fis = new FileInputStream(currentFilePath); // FileNotFoundException
+            // bufor na dane
+            StringBuffer fileContent = new StringBuffer("");
+
+            byte[] buffer = new byte[1024];
+            long maxByteSize = 1024 * 50;
+            long currentByteSize = 0;
+            int sizeOfGetData;
+
+            while ((sizeOfGetData = fis.read(buffer)) != -1 && currentByteSize < maxByteSize) { // END_OF_FILE = -1
+                String smallInput = new String(buffer, 0, sizeOfGetData);
+                Log.d("READING", String.format("smallInput = (%s)", smallInput));
+                fileContent.append(smallInput);
+                currentByteSize += buffer.length;
+            }
+
+            if (currentByteSize > maxByteSize) {
+                fileContent.append("TOO MUCH DATA");
+            }
+
+            outputText.setText(fileContent.toString());
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            // plik nie istnieje
+        } catch (IOException e) {
+            e.printStackTrace();
+            // plik jest uzywany lub nie mam dostepu
+        }
     }
 
     @Override
