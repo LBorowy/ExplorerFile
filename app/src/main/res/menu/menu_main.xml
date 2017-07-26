@@ -3,8 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="pl.lborowy.nextapp.MainActivity">
     <item
+        android:id="@+id/action_goto_external"
+        android:orderInCategory="98"
+        android:title="External storage"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_goto_root"
+        android:orderInCategory="99"
+        android:title="Root"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_exit"
+        android:orderInCategory="101"
+        android:title="Exit"
         app:showAsAction="never" />
 </menu>
