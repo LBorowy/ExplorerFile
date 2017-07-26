@@ -106,8 +106,18 @@ public class MainActivity extends AppCompatActivity implements ExplorerFragment.
     }
 
     @Override
-    public void onPathClicked(String newFilePath) {
-        openExplorerFragment(newFilePath, true);
+    public void onDirectoryClicked(String newPath) {
+        openExplorerFragment(newPath, true);
+    }
+
+    @Override
+    public void onFileClicked(String filePath) {
+        //// TODO: 2017-07-26 open file
+    }
+
+    @Override
+    public void onBackClicked() {
+        getSupportFragmentManager().popBackStack(); // funkcja do cofania
     }
 
 
