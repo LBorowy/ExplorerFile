@@ -23,9 +23,9 @@ import pl.lborowy.nextapp.models.FileItem;
 import pl.lborowy.nextapp.R;
 
 
-public class ExplorerFragment extends Fragment {
-
+public class ExplorerFragment extends Fragment implements FilesAdapter.OnFileItemClicked {
     private static final String ARG_PATH_PARAM = "param1";
+    public static final boolean USE_ACTIVITY_TO_NAVIGATE = true;
 
     @BindView(R.id.explorerFragment_filePathText)
     TextView filePathText;
@@ -34,6 +34,7 @@ public class ExplorerFragment extends Fragment {
     RecyclerView recyclerView;
 
     private String currentFilePath;
+
     private ExploratorInteractionListener mListener;
     private FilesAdapter filesAdapter;
 
@@ -52,9 +53,8 @@ public class ExplorerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        if (getArguments() != null)
             currentFilePath = getArguments().getString(ARG_PATH_PARAM);
-        }
     }
 
     @Override
@@ -65,33 +65,34 @@ public class ExplorerFragment extends Fragment {
         return view;
     }
 
-    // funkcja z cyklu zycia
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //// TODO: 2017-07-25 show filePath
-        filePathText.setText(currentFilePath);
+        updateFilePath();
         loadFileList();
     }
 
+    private void updateFilePath() {
+        filePathText.setText(currentFilePath);
+    }
+
     private void loadFileList() {
-        List<FileItem> fileItemList = new ArrayList<>(); // to co mamy rzeczywiscie na dysku
+        List<FileItem> fileItems = new ArrayList<>();
         File file = new File(currentFilePath);
         if (file.isDirectory()) {
-            File[] files = file.listFiles(); // pliki do wyswietlenia na liscie
+            File[] files = file.listFiles();
+            if (files != null)
+                for (File currentFile : files) {
+                    FileItem fileItem = new FileItem(currentFile);
+                    fileItems.add(fileItem);
+                }
+        } else
+            fileItems.add(new FileItem(file));
+        Log.d("PLICZKI", "Ile plikow lub folderow " + fileItems.size());
 
-            for (File currentFile : files) { // informacje
-                FileItem fileItem = new FileItem(currentFile);
-                fileItemList.add(fileItem);
-            }
-        }
-        else {
-            fileItemList.add(new FileItem(file));
-        }
+        fileItems.add(0, new FileItem(file.getParent()));
 
-        Log.d("PLICZKI", "Ile plików lub folderów " + fileItemList.size());
-
-        filesAdapter = new FilesAdapter(getActivity().getApplicationContext(), fileItemList);
+        filesAdapter = new FilesAdapter(getActivity().getApplicationContext(), fileItems, this);
         recyclerView.setAdapter(filesAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
     }
@@ -111,10 +112,21 @@ public class ExplorerFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        filesAdapter = null;
+    }
+
+    @Override
+    public void onFileItemClicked(FileItem fileItem) {
+        if (USE_ACTIVITY_TO_NAVIGATE)
+            mListener.onPathClicked(fileItem.getPath());
+        else {
+            updateFilePath();
+            currentFilePath = fileItem.getPath();
+            loadFileList();
+        }
     }
 
     public interface ExploratorInteractionListener {
-        // TODO: Update argument type and name
         void onPathClicked(String newFilePath);
     }
 }

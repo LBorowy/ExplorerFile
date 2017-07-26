@@ -20,4 +20,5 @@ public class SettingsFragment extends Fragment {
         ButterKnife.bind(this, view);
         return view;
     }
+
 }
