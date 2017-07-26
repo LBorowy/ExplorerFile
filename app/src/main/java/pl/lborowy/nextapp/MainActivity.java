@@ -15,7 +15,7 @@ import android.view.MenuItem;
 import pl.lborowy.nextapp.fragments.ExplorerFragment;
 import pl.lborowy.nextapp.fragments.SettingsFragment;
 
-public class MainActivity extends AppCompatActivity implements ExplorerFragment.ExploratorInteractionListener{
+public class MainActivity extends AppCompatActivity implements ExplorerFragment.ExploratorInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,15 +25,20 @@ public class MainActivity extends AppCompatActivity implements ExplorerFragment.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        openExplorerFragment(Environment.getRootDirectory().getPath());
+        openExplorerFragment(Environment.getRootDirectory().getPath(), false);
 
 
     }
 
-    private void openExplorerFragment(String path) {
+    private void openExplorerFragment(String path, boolean canGoBack) {
+        int enterAnim = android.R.anim.slide_in_left;
+        int exitAnim = android.R.anim.slide_out_right;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(enterAnim, exitAnim);
         transaction.add(R.id.mainActivity_fragmentContainer, ExplorerFragment.newInstance(path));
 //        transaction.addToBackStack(null); // aby moc dac wstecz
+        if (canGoBack)
+            transaction.addToBackStack(null);
         transaction.commit();
     }
 
@@ -67,6 +72,6 @@ public class MainActivity extends AppCompatActivity implements ExplorerFragment.
 
     @Override
     public void onPathClicked(String newFilePath) {
-        openExplorerFragment(newFilePath);
+        openExplorerFragment(newFilePath, true);
     }
 }

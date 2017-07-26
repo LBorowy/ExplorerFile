@@ -5,31 +5,31 @@
     android:layout_height="wrap_content">
 
     <ImageView
+        android:id="@+id/fileItem_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        app:srcCompat="@drawable/ic_folder_open_black_24dp"
         android:padding="8dp"
-        android:id="@+id/fileItem_icon" />
+        app:srcCompat="@drawable/ic_folder_open_black_24dp" />
 
     <TextView
-        android:text="Name"
+        android:id="@+id/fileItem_nameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="8dp"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/fileItem_icon"
         android:layout_toEndOf="@+id/fileItem_icon"
-        android:id="@+id/fileItem_nameText" />
+        android:layout_toRightOf="@+id/fileItem_icon"
+        android:padding="8dp"
+        android:text="Name" />
 
     <TextView
-        android:text="File size"
+        android:id="@+id/fileItem_fileSizeText"
         android:layout_width="wrap_content"
-        android:padding="8dp"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/fileItem_nameText"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:id="@+id/fileItem_fileSizeText" />
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/fileItem_nameText"
+        android:padding="8dp"
+        android:text="File size" />
 
 
 </RelativeLayout>
