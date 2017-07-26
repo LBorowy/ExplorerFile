@@ -17,7 +17,7 @@ import pl.lborowy.nextapp.fragments.ExplorerFragment;
 import pl.lborowy.nextapp.fragments.OpenFileFragment;
 import pl.lborowy.nextapp.fragments.SettingsFragment;
 
-public class MainActivity extends AppCompatActivity implements ExplorerFragment.ExploratorInteractionListener, OpenFileFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements ExplorerFragment.ExploratorInteractionListener, OpenFileFragment.InteractionListener {
 
     private static final int ENTER_ANIM = android.R.anim.slide_in_left;
     private static final int EXIT_ANIM = android.R.anim.slide_out_right;

@@ -3,6 +3,7 @@ package pl.lborowy.nextapp.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,11 +16,10 @@ import pl.lborowy.nextapp.R;
 
 
 public class OpenFileFragment extends Fragment {
-    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PATH_PARAM = "param1";
+    private String currentFilePath;
 
-    private String mParam1;
-
-    private OnFragmentInteractionListener mListener;
+    private InteractionListener mListener;
 
     @BindView(R.id.openFileFragment_outputText)
     EditText outputText;
@@ -28,10 +28,10 @@ public class OpenFileFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static OpenFileFragment newInstance(String param1) {
+    public static OpenFileFragment newInstance(String filePath) {
         OpenFileFragment fragment = new OpenFileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PATH_PARAM, filePath);
         fragment.setArguments(args);
         return fragment;
     }
@@ -39,9 +39,8 @@ public class OpenFileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-        }
+        if (getArguments() != null)
+            currentFilePath = getArguments().getString(ARG_PATH_PARAM);
     }
 
     @Override
@@ -52,15 +51,20 @@ public class OpenFileFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        outputText.setText(currentFilePath);
+    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof InteractionListener) {
+            mListener = (InteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement InteractionListener");
         }
     }
 
@@ -70,7 +74,7 @@ public class OpenFileFragment extends Fragment {
         mListener = null;
     }
 
-    public interface OnFragmentInteractionListener {
+    public interface InteractionListener {
         void doNothing();
     }
 }
