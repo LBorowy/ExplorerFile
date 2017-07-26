@@ -1,26 +1,26 @@
 package pl.lborowy.nextapp;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import pl.lborowy.nextapp.fragments.ExplorerFragment;
+import pl.lborowy.nextapp.fragments.OpenFileFragment;
 import pl.lborowy.nextapp.fragments.SettingsFragment;
 
-public class MainActivity extends AppCompatActivity implements ExplorerFragment.ExploratorInteractionListener {
+public class MainActivity extends AppCompatActivity implements ExplorerFragment.ExploratorInteractionListener, OpenFileFragment.OnFragmentInteractionListener {
 
+    private static final int ENTER_ANIM = android.R.anim.slide_in_left;
+    private static final int EXIT_ANIM = android.R.anim.slide_out_right;
     private static final int EXTERNAL_STORAGE_REQUEST_CODE = 1500;
 
     @Override
@@ -37,18 +37,20 @@ public class MainActivity extends AppCompatActivity implements ExplorerFragment.
     }
 
     private void openExplorerFragment(String path, boolean canGoBack) {
-        int enterAnim = android.R.anim.slide_in_left;
-        int exitAnim = android.R.anim.slide_out_right;
+        Fragment fragment = ExplorerFragment.newInstance(path);
+
+        openFragment(fragment, canGoBack);
+    }
+
+    private void openFragment(Fragment fragment, boolean canGoBack) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(enterAnim, exitAnim);
-        transaction.add(R.id.mainActivity_fragmentContainer, ExplorerFragment.newInstance(path));
+        transaction.setCustomAnimations(ENTER_ANIM, EXIT_ANIM, ENTER_ANIM, EXIT_ANIM);
 //        transaction.addToBackStack(null); // aby moc dac wstecz
-        if (canGoBack){
-            transaction.add(R.id.mainActivity_fragmentContainer, ExplorerFragment.newInstance(path));
+        if (canGoBack) {
+            transaction.add(R.id.mainActivity_fragmentContainer, fragment);
             transaction.addToBackStack(null);
-        }
-        else {
-            transaction.replace(R.id.mainActivity_fragmentContainer, ExplorerFragment.newInstance(path));
+        } else {
+            transaction.replace(R.id.mainActivity_fragmentContainer, fragment);
         }
         transaction.commit();
     }
@@ -113,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements ExplorerFragment.
     @Override
     public void onFileClicked(String filePath) {
         //// TODO: 2017-07-26 open file
+        openFragment(OpenFileFragment.newInstance(filePath), true);
     }
 
     @Override
@@ -121,4 +124,8 @@ public class MainActivity extends AppCompatActivity implements ExplorerFragment.
     }
 
 
+    @Override
+    public void doNothing() {
+        // nothing
+    }
 }
