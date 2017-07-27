@@ -25,7 +25,7 @@ import pl.lborowy.nextapp.R;
 
 public class ExplorerFragment extends Fragment implements FilesAdapter.OnFileItemClicked {
     private static final String ARG_PATH_PARAM = "param1";
-    public static final boolean USE_ACTIVITY_TO_NAVIGATE = true; // false - brak przezroczystych fragmentow
+    public static final boolean USE_ACTIVITY_TO_NAVIGATE = true;
 
     @BindView(R.id.explorerFragment_filePathText)
     TextView filePathText;
@@ -90,9 +90,8 @@ public class ExplorerFragment extends Fragment implements FilesAdapter.OnFileIte
             fileItems.add(new FileItem(file));
         Log.d("PLICZKI", "Ile plikow lub folderow " + fileItems.size());
 
-        if (!currentFilePath.equals(File.separator)) {
+        if (!currentFilePath.equals(File.separator))
             fileItems.add(0, new FileItem(file.getParent()));
-        }
 
         filesAdapter = new FilesAdapter(getActivity().getApplicationContext(), fileItems, this);
         recyclerView.setAdapter(filesAdapter);
@@ -119,20 +118,16 @@ public class ExplorerFragment extends Fragment implements FilesAdapter.OnFileIte
 
     @Override
     public void onFileItemClicked(FileItem fileItem) {
-//        String path = fileItem.getPath();
-//        if (path != null && !path.equals(File.separator))
         if (USE_ACTIVITY_TO_NAVIGATE) {
-            if (fileItem.isDirectory()) {
-                if (fileItem.getName().equals(".."))
+            if(fileItem.isDirectory()) {
+                if(fileItem.getName().equals(".."))
                     mListener.onBackClicked();
                 else
-                mListener.onDirectoryClicked(fileItem.getPath());
-            }
-            else {
+                    mListener.onDirectoryClicked(fileItem.getPath());
+            } else
                 mListener.onFileClicked(fileItem.getPath());
-            }
-        }
-        else {
+
+        } else {
             currentFilePath = fileItem.getPath();
             updateFilePath();
             loadFileList();

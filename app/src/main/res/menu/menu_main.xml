@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="pl.lborowy.nextapp.MainActivity">
     <item
+        android:id="@+id/action_add_file"
+        android:orderInCategory="97"
+        android:title="Add file"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_goto_external"
         android:orderInCategory="98"
         android:title="External storage"

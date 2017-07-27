@@ -35,11 +35,10 @@ public class FilesAdapter extends RecyclerView.Adapter<FileViewHolder> {
     public void onBindViewHolder(FileViewHolder holder, int position) {
         final FileItem fileItem = fileItems.get(position);
         holder.nameText.setText(fileItem.getName());
-
-        if (fileItem.isDirectory()) // jezeli to jest folder
-            holder.icon.setImageResource(R.drawable.ic_folder_open_black_24dp); // to ikona folderu
+        if (fileItem.isDirectory())
+            holder.icon.setImageResource(R.drawable.ic_folder_open_black_24dp);
         else
-            holder.icon.setImageResource(R.drawable.ic_insert_drive_file_black_24dp); // ikona pliku
+            holder.icon.setImageResource(R.drawable.ic_insert_drive_file_black_24dp);
         //// TODO: 25.07.2017 show file size
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
